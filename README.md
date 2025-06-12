@@ -118,6 +118,28 @@ item.displayInfo(); // memanggil method sesuai jenis objek
 
 ## Struktur Kode
 
+```
+DigiPus/
+├── .vscode/
+├── bin/
+├── legal/
+├── lib/
+│
+├── models/
+│   ├── Book.java
+│   ├── Library.java
+│   ├── LibraryItem.java
+│   ├── LibraryLogger.java
+│   ├── Magazine.java
+│   ├── Member.java
+│   └── User.java
+│
+├── Main.java
+├── MainCSS.java
+├── README.md
+└── src.zip
+```
+
 ---
 
 ## Cara Menjalankan Aplikasi Digipus
@@ -132,15 +154,28 @@ git clone https://github.com/Faderu/DigiPus.git
 
 3. Jalankan file Main.java dari IDE.
 
-4. Input dan Interaksi :
+4. Alur Penggunaan DigiPus :
 
 - Program akan berjalan melalui console (CLI).
-- Ikuti instruksi yang muncul, seperti menambahkan data buku, melihat daftar item, atau mencari informasi anggota.
+
+- Pada tampilan awal, Admin masuk ke halaman login.
+
+  - Jika Admin sudah memiliki akun maka cukup login untuk masuk ke aplikasi.
+
+  - Jika Admin belum memiliki akun, maka Admin akan diminta untuk melakukan register dengan mengisi `username` dan `password` lalu login dengan akun yang sudah didaftarkan pada saat register.
+
+- Setelah melakukan register dan login, maka Admin akan otomatis masuk ke halaman utama pengelolaan perpustakaan dan dapat menggunakan fitur-fitur yang sudah tersedia.
+
+  **Selamat mencoba dan have fun! 🚀📚**
+
+---
 
 ## Pembagian Tugas Per Anggota
 
-- MUHAMMAD FADEL ARYASATYA MAKKULAU (H071241077)
+**MUHAMMAD FADEL ARYASATYA MAKKULAU (H071241077)**  
+Bertugas membuat tampilan program dan menjalankan aplikasi perpustakaan. Membuat GUI (tampilan grafis) untuk memudahkan pengguna menggunakan program, menambahkan CSS untuk mempercantik tampilan, dan membuat main program sebagai bagian utama yang menjalankan seluruh sistem. Kode yang dibuat memungkinkan pengguna berinteraksi dengan sistem perpustakaan melalui tampilan yang mudah digunakan dan menarik.
 
-- MUHAMMAD ALIF SAKTI (H071241018)
+**DIESTY MENDILA TAPPO (H071241077)**  
+Bertanggung jawab dalam pengembangan 7 class model sistem perpustakaan yaitu LibraryItem.java (abstract class untuk semua item), Book.java dan Magazine.java, Member.java, Library.java, LibraryLogger.java, dan User.java. Kode ini menerapkan prinsip OOP dengan inheritance, encapsulation, abstraction, dan polymorphism untuk menyediakan struktur data dan logika program yang mendukung fungsionalitas manajemen perpustakaan.
 
-- DIESTY MENDILA TAPPO (H071241077)
+**MUHAMMAD ALIF SAKTI (H071241018)**
