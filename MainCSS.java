@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class MainCSS extends Application {
     private Library library;
@@ -402,16 +403,23 @@ public class MainCSS extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(idField.getText());
-                String itemTitle = titleField.getText(); // Renamed to avoid confusion with 'title'
+                try {
+                    library.findItemById(id);
+                    showAlert("Error", "ID Item sudah digunakan.");
+                    return;
+                } catch (NoSuchElementException e) {
+                }
+                String itemTitle = titleField.getText();
                 LibraryItem item;
                 if (categoryCombo.getValue().equals("Majalah")) {
-                    item = new Magazine(itemTitle, id, 1); // Default issue number, adjust as needed
+                    item = new Magazine(itemTitle, id, 1);
                 } else {
                     item = new Book(itemTitle, id, authorField.getText());
                 }
                 library.addItem(item);
                 itemStatusArea.setText(library.getLibraryStatus());
                 clearFields(titleField, idField, authorField);
+                showAlert("Sukses", "Item berhasil ditambahkan");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
@@ -476,10 +484,15 @@ public class MainCSS extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(memberIdField.getText());
+                if (library.findMemberById(id) != null) {
+                    showAlert("Error", "ID Member sudah digunakan.");
+                    return;
+                }
                 String name = nameField.getText();
                 library.registerMember(new Member(name, id));
                 memberList.setText(getMemberList());
                 clearFields(nameField, memberIdField);
+                showAlert("Sukses", "Anggota berhasil ditambahkan");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
@@ -844,7 +857,7 @@ public class MainCSS extends Application {
         try (BufferedReader br = new BufferedReader(new FileReader(MEMBERS_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",", -1); // Use -1 to handle trailing commas
+                String[] data = line.split(",", -1);
                 if (data.length >= 2) {
                     Member member = new Member(data[0], Integer.parseInt(data[1]));
                     library.registerMember(member);
@@ -854,9 +867,8 @@ public class MainCSS extends Application {
                             if (!id.isEmpty()) {
                                 try {
                                     LibraryItem item = library.findItemById(Integer.parseInt(id));
-                                    member.addBorrowedItem(item); // New method
+                                    member.addBorrowedItem(item);
                                 } catch (Exception e) {
-                                    // Skip invalid item IDs
                                 }
                             }
                         }

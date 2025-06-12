@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Main extends Application {
     private Library library;
@@ -252,6 +253,12 @@ public class Main extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(idField.getText());
+                try {
+                    library.findItemById(id);
+                    showAlert("Error", "ID Item sudah digunakan.");
+                    return;
+                } catch (NoSuchElementException e) {
+                }
                 String title = titleField.getText();
                 LibraryItem item;
                 if (typeCombo.getValue().equals("Buku")) {
@@ -309,6 +316,10 @@ public class Main extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(memberIdField.getText());
+                if (library.findMemberById(id) != null) {
+                    showAlert("Error", "ID Member sudah digunakan.");
+                    return;
+                }
                 String name = nameField.getText();
                 library.registerMember(new Member(name, id));
                 memberList.setText(getMemberList());
