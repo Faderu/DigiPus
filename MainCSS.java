@@ -375,10 +375,10 @@ public class MainCSS extends Application {
         titleField.setStyle(
                 "-fx-padding: 12; -fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #3498db;");
 
-        Label authorLabel = new Label("Pengarang");
-        TextField authorField = new TextField();
-        authorField.setPromptText("Pengarang");
-        authorField.setStyle(
+        Label authorIssueLabel = new Label("Pengarang");
+        TextField authorIssueField = new TextField();
+        authorIssueField.setPromptText("Pengarang");
+        authorIssueField.setStyle(
                 "-fx-padding: 12; -fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #3498db;");
 
         Label idLabel = new Label("ID");
@@ -394,6 +394,17 @@ public class MainCSS extends Application {
         categoryCombo.setStyle(
                 "-fx-padding: 12; -fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #3498db;");
 
+        categoryCombo.setOnAction(_ -> {
+            if (categoryCombo.getValue().equals("Majalah")) {
+                authorIssueLabel.setText("Nomor Edisi");
+                authorIssueField.setPromptText("Nomor Edisi");
+            } else {
+                authorIssueLabel.setText("Pengarang");
+                authorIssueField.setPromptText("Pengarang");
+            }
+            authorIssueField.clear();
+        });
+
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -403,6 +414,10 @@ public class MainCSS extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(idField.getText());
+                if (id < 1) {
+                    showAlert("Error", "ID Item harus lebih besar dari atau sama dengan 1.");
+                    return;
+                }
                 try {
                     library.findItemById(id);
                     showAlert("Error", "ID Item sudah digunakan.");
@@ -412,14 +427,19 @@ public class MainCSS extends Application {
                 String itemTitle = titleField.getText();
                 LibraryItem item;
                 if (categoryCombo.getValue().equals("Majalah")) {
-                    item = new Magazine(itemTitle, id, 1);
+                    int issueNumber = Integer.parseInt(authorIssueField.getText());
+                    item = new Magazine(itemTitle, id, issueNumber);
                 } else {
-                    item = new Book(itemTitle, id, authorField.getText());
+                    item = new Book(itemTitle, id, authorIssueField.getText());
                 }
                 library.addItem(item);
                 itemStatusArea.setText(library.getLibraryStatus());
-                clearFields(titleField, idField, authorField);
+                clearFields(titleField, idField, authorIssueField);
                 showAlert("Sukses", "Item berhasil ditambahkan");
+            } catch (NumberFormatException ex) {
+                showAlert("Error",
+                        categoryCombo.getValue().equals("Majalah") ? "Nomor Edisi atau ID harus berupa angka."
+                                : "ID atau input tidak valid.");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
@@ -442,8 +462,8 @@ public class MainCSS extends Application {
         itemStatusArea.setText(library.getLibraryStatus());
         itemStatusArea.setStyle("-fx-background-radius: 10; -fx-border-radius: 10;");
 
-        formCard.getChildren().addAll(titleLabel, titleField, authorLabel, authorField, idLabel, idField, categoryLabel,
-                categoryCombo, buttonBox);
+        formCard.getChildren().addAll(titleLabel, titleField, authorIssueLabel, authorIssueField, idLabel, idField,
+                categoryLabel, categoryCombo, buttonBox);
         root.getChildren().addAll(title, formCard, itemStatusArea);
 
         return new Scene(root, 800, 700);
@@ -489,6 +509,10 @@ public class MainCSS extends Application {
                     return;
                 }
                 int id = Integer.parseInt(memberIdField.getText());
+                if (id < 1) {
+                    showAlert("Error", "ID Member harus lebih besar dari atau sama dengan 1.");
+                    return;
+                }
                 if (library.findMemberById(id) != null) {
                     showAlert("Error", "ID Member sudah digunakan.");
                     return;
@@ -497,6 +521,8 @@ public class MainCSS extends Application {
                 memberList.setText(getMemberList());
                 clearFields(nameField, memberIdField);
                 showAlert("Sukses", "Anggota berhasil ditambahkan");
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "ID Member harus berupa angka yang valid.");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
@@ -765,22 +791,6 @@ public class MainCSS extends Application {
         statsGrid.add(availableBooksButton, 0, 1);
         statsGrid.add(totalMembersButton, 1, 1);
 
-        VBox statusDetail = new VBox(10);
-        statusDetail.setPadding(new Insets(20));
-        statusDetail.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);");
-        statusDetail.setAlignment(Pos.CENTER);
-
-        Label statusLabel = new Label("Status Detail Item");
-        statusLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        statusLabel.setTextFill(Color.GRAY);
-
-        TextField statusField = new TextField();
-        statusField.setEditable(false);
-        statusField.setStyle(
-                "-fx-background-color: white; -fx-border-color: #3498db; -fx-border-radius: 5; -fx-padding: 10;");
-        statusField.setText(getItemStatus());
-
         Button closeButton = new Button("Tutup");
         closeButton.setStyle(
                 "-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 25;");
@@ -790,11 +800,9 @@ public class MainCSS extends Application {
             primaryStage.setTitle("Perpustakaan Digital");
         });
 
-        statusDetail.getChildren().addAll(statusLabel, statusField, closeButton);
+        root.getChildren().addAll(title, statsGrid, closeButton);
 
-        root.getChildren().addAll(title, statsGrid, statusDetail);
-
-        return new Scene(root, 800, 670);
+        return new Scene(root, 800, 550);
     }
 
     private Button createStatButton(String icon, String title, String value, String color) {
@@ -820,17 +828,6 @@ public class MainCSS extends Application {
         button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 
         return button;
-    }
-
-    private String getItemStatus() {
-        for (LibraryItem item : library.getItems()) {
-            if (item instanceof Book) {
-                Book book = (Book) item;
-                return "Buku: " + book.getTitle() + " oleh " + book.getAuthor() + ", ID: " + book.getItemId() + " - "
-                        + (book.isBorrowed() ? "Dipinjam" : "Tersedia");
-            }
-        }
-        return "Tidak ada item.";
     }
 
     private void loadUsers() {
