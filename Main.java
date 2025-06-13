@@ -275,7 +275,7 @@ public class Main extends Application {
                 clearFields(titleField, idField, authorIssueField);
                 showAlert("Note", "Item berhasil ditambahkan");
             } catch (NumberFormatException ex) {
-                showAlert("Error", "ID Item harus berupa angka yang valid.");
+                showAlert("Error", "Nomor Edisi harus berupa angka yang valid.");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
