@@ -9,8 +9,6 @@ abstract class LibraryItem {
         this.isBorrowed = false;
     }
 
-    public abstract String getDescription();
-
     public abstract String borrowItem(int days);
 
     public abstract double calculateFine(int daysLate);
