@@ -39,6 +39,9 @@ class Library {
 
     public void registerMember(Member member) {
         members.add(member);
+        String logMessage = "Member " + member.getName() + " dengan ID: " + member.getMemberId()
+                + " berhasil ditambahkan";
+        logger.logActivity(logMessage);
     }
 
     public Member findMemberById(int memberId) {
