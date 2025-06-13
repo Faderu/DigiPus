@@ -7,11 +7,6 @@ class Book extends LibraryItem {
     }
 
     @Override
-    public String getDescription() {
-        return "Buku: " + title + " oleh " + author + ", ID: " + itemId;
-    }
-
-    @Override
     public String borrowItem(int days) {
         if (isBorrowed)
             throw new IllegalArgumentException("Buku sudah dipinjam.");

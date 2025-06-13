@@ -7,11 +7,6 @@ class Magazine extends LibraryItem {
     }
 
     @Override
-    public String getDescription() {
-        return "Majalah: " + title + " (Edisi " + issueNumber + "), ID: " + itemId;
-    }
-
-    @Override
     public String borrowItem(int days) {
         if (isBorrowed)
             throw new IllegalArgumentException("Majalah sudah dipinjam.");
