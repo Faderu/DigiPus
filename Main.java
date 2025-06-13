@@ -315,12 +315,16 @@ public class Main extends Application {
 
         addButton.setOnAction(_ -> {
             try {
+                String name = nameField.getText().trim();
+                if (name.isEmpty()) {
+                    showAlert("Error", "Nama member tidak boleh kosong.");
+                    return;
+                }
                 int id = Integer.parseInt(memberIdField.getText());
                 if (library.findMemberById(id) != null) {
                     showAlert("Error", "ID Member sudah digunakan.");
                     return;
                 }
-                String name = nameField.getText();
                 library.registerMember(new Member(name, id));
                 memberList.setText(getMemberList());
                 clearFields(nameField, memberIdField);
@@ -367,6 +371,12 @@ public class Main extends Application {
                 int memberId = Integer.parseInt(memberIdField.getText());
                 int itemId = Integer.parseInt(itemIdField.getText());
                 int days = Integer.parseInt(daysField.getText());
+
+                if (days <= 0) {
+                    showAlert("Error", "Jumlah hari harus lebih besar dari 0.");
+                    return;
+                }
+
                 Member member = library.findMemberById(memberId);
                 if (member == null)
                     throw new IllegalArgumentException("Member tidak ditemukan");
@@ -418,10 +428,17 @@ public class Main extends Application {
                 int memberId = Integer.parseInt(memberIdField.getText());
                 int itemId = Integer.parseInt(itemIdField.getText());
                 int daysLate = Integer.parseInt(daysLateField.getText());
+
                 Member member = library.findMemberById(memberId);
                 if (member == null)
                     throw new IllegalArgumentException("Member tidak ditemukan");
+
                 LibraryItem item = library.findItemById(itemId);
+                if (item == null) {
+                    showAlert("Error", "Item tidak ditemukan.");
+                    return;
+                }
+
                 String result = member.returnItem(item, daysLate);
                 library.getLogger().logActivity(result);
                 itemStatusArea.setText(library.getLibraryStatus());
