@@ -253,6 +253,10 @@ public class Main extends Application {
         addButton.setOnAction(_ -> {
             try {
                 int id = Integer.parseInt(idField.getText());
+                if (id < 1) {
+                    showAlert("Error", "ID Item harus lebih besar dari atau sama dengan 1.");
+                    return;
+                }
                 try {
                     library.findItemById(id);
                     showAlert("Error", "ID Item sudah digunakan.");
@@ -270,6 +274,8 @@ public class Main extends Application {
                 itemStatusArea.setText(library.getLibraryStatus());
                 clearFields(titleField, idField, authorIssueField);
                 showAlert("Note", "Item berhasil ditambahkan");
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "ID Item harus berupa angka yang valid.");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
@@ -321,6 +327,10 @@ public class Main extends Application {
                     return;
                 }
                 int id = Integer.parseInt(memberIdField.getText());
+                if (id < 1) {
+                    showAlert("Error", "ID Member harus lebih besar dari atau sama dengan 1.");
+                    return;
+                }
                 if (library.findMemberById(id) != null) {
                     showAlert("Error", "ID Member sudah digunakan.");
                     return;
@@ -329,6 +339,8 @@ public class Main extends Application {
                 memberList.setText(getMemberList());
                 clearFields(nameField, memberIdField);
                 showAlert("Note", "Member berhasil ditambahkan");
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "ID Member harus berupa angka yang valid.");
             } catch (Exception ex) {
                 showAlert("Error", ex.getMessage());
             }
