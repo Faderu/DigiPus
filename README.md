@@ -36,14 +36,12 @@ Encapsulation diterapkan dengan menjaga atribut kelas bersifat private dan menye
 
 Contoh Penerapan:
 
-- Di kelas `Book`, atribut seperti `title`, `author`, dan `isbn` disembunyikan (private), dan hanya bisa diakses atau diubah melalui method publik `getTitle()`, `getAuthor()`, dan `setTitle(...)`.
-
-- Di kelas `Member`, data pribadi seperti `name` dan `ID` dienkapsulasi agar tidak bisa diubah langsung dari luar objek.
+- Di kelas `Member`, data pribadi seperti `name` dan `ID` dienkapsulasi menggunakan private agar tidak bisa diubah langsung dari luar objek.
 
 - `LibraryLogger` juga menggunakan enkapsulasi dalam menyimpan log aktivitas dan hanya membukanya melalui method tertentu, seperti ``log(...)```.
 
 ```
-private String title;
+protected String title;
 ```
 
 ```
@@ -63,11 +61,11 @@ Contoh Penerapan:
 - Kelas `Book` dan `Magazine` mewarisi dari `LibraryItem`, dan menambahkan atribut spesifik masing-masing seperti `author`, `isbn` (untuk Book), atau `issueNumber` (untuk Magazine).
 
 ```
-public class Book extends LibraryItem { ... }
+class Book extends LibraryItem { ... }
 ```
 
 ```
-public class Magazine extends LibraryItem { ... }
+class Magazine extends LibraryItem { ... }
 ```
 
 ### **Abstraction**
@@ -76,19 +74,18 @@ Abstraction menyembunyikan proses internal dan hanya menunjukkan fungsi utama ya
 
 Contoh Penerapan:
 
-- Kelas `LibraryItem` adalah abstrak, dengan method `displayInfo()` yang juga abstrak. Subclass `Book` dan `Magazine` diwajibkan untuk mengimplementasikan method ini sesuai kebutuhan masing-masing.
+- Kelas `LibraryItem` adalah abstract class, dengan method `borrowItem` dan `calculatorFine` yang juga abstrak. Subclass `Book` dan `Magazine` diwajibkan untuk mengimplementasikan method ini sesuai kebutuhan masing-masing.
 
 - Hal ini memungkinkan sistem memperlakukan semua item perpustakaan sebagai `LibraryItem`, tanpa peduli apakah itu buku, majalah, atau jenis item lain yang akan ditambahkan nanti.
 
-- Di kelas `Library`, metode seperti `addItem` atau `displayItems()` bekerja secara umum terhadap referensi `LibraryItem`, tanpa mengetahui implementasi detail dari setiap subclass.
+- Di kelas `Library`, metode seperti `addItem` bekerja secara umum terhadap referensi `LibraryItem`, tanpa mengetahui implementasi detail dari setiap subclass.
 
 ```
-public abstract class LibraryItem {
+abstract class LibraryItem { ... }
 ```
 
 ```
-    public abstract String getDetails();
-}
+public abstract String borrowItem();
 ```
 
 ### **Polymorpishm**
@@ -97,21 +94,18 @@ Polimorfisme memungkinkan objek dengan bentuk yang berbeda untuk diproses melalu
 
 Contoh Penerapan:
 
-- Dalam `Library`, `daftar item` (ArrayList<LibraryItem>) dapat menyimpan objek `Book` dan `Magazine`, dan jenis item lain, selama mereka merupakan turunan `LibraryItem`.
-
-- Saat method `displayInfo()` dipanggil pada objek `LibraryItem`, Java secara otomatis memanggil implementasi spesifik berdasarkan tipe asli objek, apakah itu dari kelas `Book` atau `Magazine`.
+- Dalam `Library`, daftar item `(ArrayList<LibraryItem>)` dapat menyimpan objek `Book` dan `Magazine`, dan jenis item lain, selama mereka merupakan turunan `LibraryItem`.
 
 - Ini juga terlihat dalam Main.java, di mana saat menambahkan item ke perpustakaan, cukup gunakan:
 
 ```
-library.addItem(new Book(...));
-library.addItem(new Magazine(...));
+library.addItem(item);
 ```
 
 - dan saat ditampilkan:
 
 ```
-item.displayInfo(); // memanggil method sesuai jenis objek
+library.getLibraryStatus();
 ```
 
 ---
