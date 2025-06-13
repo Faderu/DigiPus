@@ -791,6 +791,16 @@ public class MainCSS extends Application {
         statsGrid.add(availableBooksButton, 0, 1);
         statsGrid.add(totalMembersButton, 1, 1);
 
+        Label itemListTitle = new Label("Daftar Item Perpustakaan");
+        itemListTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        itemListTitle.setTextFill(Color.WHITE);
+
+        TextArea itemListArea = new TextArea();
+        itemListArea.setEditable(false);
+        itemListArea.setPrefHeight(200);
+        itemListArea.setText(library.getLibraryStatus());
+        itemListArea.setStyle("-fx-background-radius: 10; -fx-border-radius: 10;");
+
         Button closeButton = new Button("Tutup");
         closeButton.setStyle(
                 "-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 25;");
@@ -800,9 +810,9 @@ public class MainCSS extends Application {
             primaryStage.setTitle("Perpustakaan Digital");
         });
 
-        root.getChildren().addAll(title, statsGrid, closeButton);
+        root.getChildren().addAll(title, statsGrid, itemListTitle, itemListArea, closeButton);
 
-        return new Scene(root, 800, 550);
+        return new Scene(root, 800, 700);
     }
 
     private Button createStatButton(String icon, String title, String value, String color) {
