@@ -9,8 +9,10 @@ class Library {
 
     public String addItem(LibraryItem item) {
         items.add(item);
-        logger.logActivity(item.getTitle() + " berhasil ditambahkan");
-        return item.getTitle() + " berhasil ditambahkan";
+        String itemType = item instanceof Book ? "Buku" : "Majalah";
+        String logMessage = itemType + " " + item.getTitle() + " berhasil ditambahkan";
+        logger.logActivity(logMessage);
+        return logMessage;
     }
 
     public LibraryItem findItemById(int itemId) {
