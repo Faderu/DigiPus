@@ -40,10 +40,12 @@ class Library {
     }
 
     public Member findMemberById(int memberId) {
-        return members.stream()
-                .filter(m -> m.getMemberId() == memberId)
-                .findFirst()
-                .orElse(null);
+        for (Member m : members) {
+            if (m.getMemberId() == memberId) {
+                return m;
+            }
+        }
+        return null;
     }
 
     public LibraryLogger getLogger() {
